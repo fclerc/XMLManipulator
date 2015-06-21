@@ -26,10 +26,8 @@
         <script type="text/javascript">
         $(function(){    
             
-            var translationFile = 'translation/'+<?php echo "'".$lang."'"; ?>+'.
                     //getting the file and corresponding scales, and calling the function to display XML
-                    var file = <?php echo "'".$path."/".$file."'"; ?>;
-                    var scales = <?php if($scales!=''){echo file_get_contents($scales);}else{echo '""';} ?>;
+                    var file = "data/sample.xml"
                     manipulateXML(file,'#XMLcontainer', 'modify','', scales , '#scalesContainer', "#currentFileName");   
                 }
             });
