@@ -1,25 +1,15 @@
 /*
 Script used to display in web browser the values contained in an XML file. Modification is possible in mode = "modify"
-
+Has to be called in a context where jQuery is already loaded.
 In mode 'select', "leafValueReading" events will be triggered, containing the id of the xml leaf concerned, and the value it contains.
 */
-
-
-
-
-
 
 //mode : 'modify' (to modify the leaves  and attributes values in the file), 'selectWithValues' (used to enable the user to select elements in the tree, and sending events to the reader to enable treatment), 'selectWithoutValues' (same, but leaves values aren't displayed)
 //container : the id of the container of the displayed XML, for example : '#MyXMLContainer'. Used as a sort of namespace for data manipulation in case of using several times this function in the same page (see xml[container] or selectors to define events).
 //reader : "leafValueReading" events will be triggered when user clicks on elements names, and reader will be your own element (on your web page) that will trigger these events, and then treat them (for example to display the content on which the user clicked).
-//scales : json with information about the indicators. WARNING : scalesDisplayers have to be loaded before.
-//scaleContainer : the html element you want the scale to be displayed
 //filenameContainer : if elements in your page display the name of the file, give their selector in order to have name changed if the user renames his file.
-function manipulateXML(filepath, container, mode, reader, scales, scaleContainer, filenameContainer){
-    scales = typeof scales !== 'undefined' ? scales : '';
-    scaleContainer = typeof scaleContainer !== 'undefined' ? scaleContainer : '';
+function manipulateXML(filepath, container, mode, reader, filenameContainer){
     filenameContainer = typeof filenameContainer !== 'undefined' ? filenameContainer : '';
-    
     
     return $.ajax({
 		type: "GET",
@@ -29,15 +19,14 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
 			xml[container]=$(data);//load xml tree
 			
 			
-			//going recursively through the xml, and displaying its content in the form of lists (corresponding exactly to the structure of the tree)
-			$(container).append($('<div>').addClass('XMLContainer').addClass(filepath.split('.').join("")).append(displayAndChildren($(xml[container]).children().first()[0], mode, scales, scaleContainer) ));
+			//going recursively through the xml, and displaying its content in the form of html lists (corresponding exactly to the structure of the tree)
+			$(container).append($('<div>').addClass('XMLContainer').addClass(filepath.split('.').join("")).append(displayAndChildren($(xml[container]).children().first()[0], mode)));
 			
-			//for elements having children below them : toggle visibility of this elements list when clicking on the element
+
+
+			//for elements having children below them : toggle visibility of these elements' list when clicking on the icon next to it
 			$(container +' .reducer').click(function(event){
 				var toToggle = $(event.target).next().next();
-                if(toToggle[0].nodeName != 'ul' && toToggle[0].nodeName != 'UL'){//in case there is the information icon, go one step further to find the list to hide.
-                    toToggle = $(toToggle).next()
-                }
                 if(toToggle[0].nodeName != 'ul' && toToggle[0].nodeName != 'UL'){//in case there is a value, go one step further to find the list to hide.
                     toToggle = $(toToggle).next()
                 }
@@ -58,8 +47,8 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
 			
 			
 			//If element can be modified :
-			//-on click : replace it by input containing the value
-			//-when enter is pressed on the input : replace input by simple text with the new value, and store the value in the xml tree
+			//-on click : replace it with html input containing the value
+			//-when enter is pressed on the input : replace html input with simple text with the new value, and store the value in the xml tree
 			$(container +' .value').click(function(event){
 				var elem = event.target;
 				var value = $(elem).html();
@@ -68,7 +57,7 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
 				//the target can be 2 things : the span (thus check if it doesn't already contain an input), or the input (thus don't try to add a new input into this)
 					if($(elem).children('input').length === 0 && $(elem).prop('tagName')!='INPUT'){//we have to add an input
 						input=$('<input>').attr("type", "text").attr('value', value);
-						if(value == '&nbsp;'){//if the value is just the space we use to always hae span with a min-width : don't display the entity of the space
+						if(value == '&nbsp;'){//if the value is just the space we use to always have span with a min-width : don't display the entity of the space
 							$(input).attr('value', '');
 						}
 						$(elem).html(input);
@@ -81,7 +70,7 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
 								var value = $(input).prop('value');
 								var id;
 								if($(input).parent().hasClass('attribute')){
-									//finding the right element having this attribute
+									//finding the right element having this attribute, and replacing the value in both the html and the xml tree
 									var data = $(input).parent().parent().attr('id').split('--');
 									id = data[0];
 									var attribute = data[1];
@@ -94,7 +83,7 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
 									$(xml[container]).find('[id="' + id + '"]').attr(attribute, value);
 								}
 								
-								else{//replace the value of an element
+								else{//replace the value of an element in both html and xml tree
 									id = $(input).parent().parent().attr("id");//corresponding id in the xml tree
 									
 									var valueToDisplay;
@@ -131,11 +120,11 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
                 var filename = filepath.replace(/^.*(\\|\/|\:)/, '');//just the name of the file
                 var repo = filepath.replace('/'+filename, '');//the name of the dossier where the file is situated
                 
-                var filenameInputContainer = $('<span>').append(_('Name: ')).addClass('filenameInput');
+                var filenameInputContainer = $('<span>').append('Name: ').addClass('filenameInput');
 				var filenameInput = $('<input>').attr('type', 'text').attr('value', filename);//input to enable user to change the name of file
                 $(filenameInputContainer).append(filenameInput);
                 $(container).prepend(filenameInputContainer);
-                $(container).prepend($('<button>').addClass('btn btn-info').attr('id', "XMLSaveButton").append($('<span>').addClass('glyphicon glyphicon-floppy-disk')).append(_("Save modifications")));
+                $(container).prepend($('<button>').addClass('btn btn-info').attr('id', "XMLSaveButton").append($('<span>').addClass('glyphicon glyphicon-floppy-disk')).append("Save modifications"));
 			
 			
 			
@@ -168,16 +157,12 @@ function manipulateXML(filepath, container, mode, reader, scales, scaleContainer
     //this function takes a XML node as argument, and returns an element <li> containing his Name, and:
     //-if it has children: the list of its children
     //-if it has no child: display  its value
-function displayAndChildren(xmlNode, mode, scales, scaleContainer){
+function displayAndChildren(xmlNode, mode){
     //for each node : add it as an item to the list of its parent's elements (except for first element)
     var idText='';
     //uncomment next line to display the id
     //var idText=' (' + $(xmlNode).attr('id') + ') ';
     var nodeName = xmlNode.nodeName;
-    var untranslatedNodeName = nodeName;
-    if(typeof window._ != "undefined"){//if translation object is set, translate the nodeName
-        nodeName = _(nodeName);
-    }
     
     var elementNameContainer = $('<span>').append(nodeName + idText).addClass('elementName');
     if(mode != 'modify'){
@@ -185,32 +170,6 @@ function displayAndChildren(xmlNode, mode, scales, scaleContainer){
     }
     
     var result = $('<li>').attr('id', $(xmlNode).attr('id')).append(elementNameContainer);
-    
-    if(scales !== ''){//if we want to display the scales (eg scales were passed in argument).
-        var popoverTitleInfo = 'Click for more information'
-        if(typeof window._ != "undefined"){//if translation object is set, translate the nodeName
-            popoverTitleInfo = _(popoverTitleInfo);
-        }
-        //when hovering the information glyphicon, display the sccalesContainer div with the relevant information
-        var commentPopover = $('<span>').addClass('glyphicon glyphicon-info-sign commentPopover').attr('title', popoverTitleInfo);
-        $(commentPopover).hover(function(){
-            $(scaleContainer).empty();
-            displayIndicatorScale(untranslatedNodeName, scaleContainer, $(xmlNode).attr('id'), scales, false);
-            $(scaleContainer).show();
-        },
-        function(){
-            $(scaleContainer).hide();
-        });
-        if(scales[untranslatedNodeName]){
-            if(scales[untranslatedNodeName].documentation){
-                $(commentPopover).click(function(){
-                    alert(scales[untranslatedNodeName].documentation);
-                });
-            }
-            $(result).append(commentPopover);
-        }
-    }
-    
     
     //if the node has children : display the list of these children.
     //reducer class enables to toggle visibility of children (particular case is: node has an attribute, this attribute is 'fixed', which is not displayed
@@ -247,13 +206,7 @@ function displayAndChildren(xmlNode, mode, scales, scaleContainer){
                 var idText='';//uncomment next line to display the id
                 //var idText=' (' + $(xmlNode).attr('id') +'--'+ attrib.name + '): ';
                 var attribName = attrib.name;
-                if(typeof window._ != "undefined"){//if translation object is set, translate the nodeName
-                    attribName = _(attribName);
-                }
 				var attributeValue = attrib.value;
-				if(attributeValue === ''){
-					attributeValue = '&nbsp;';
-				}
 				//display the element name (or more precisely the attribute name ... but for the user everything will be like an element)
                 var elementNameContainer = $('<span>').addClass('elementName').text(attribName + idText)
                 if(mode != 'modify'){
@@ -280,8 +233,9 @@ function displayAndChildren(xmlNode, mode, scales, scaleContainer){
             }
         });
         
+        //finally calling the same function recursievely on all the children
         $(xmlNode).children().each(function(){
-            $(chs).append(displayAndChildren(this, mode, scales, scaleContainer));
+            $(chs).append(displayAndChildren(this, mode));
         });
         
         result.append(chs);
@@ -290,7 +244,6 @@ function displayAndChildren(xmlNode, mode, scales, scaleContainer){
     
     else if(mode != 'selectWithoutValues'){
     //if no child: display the node value, with class indicating you can modify it (if mode = modify)
-		
 		var valueContainer = $('<span>');
 		if($(xmlNode).html() === ''){
 			$(valueContainer).append('&nbsp;');
