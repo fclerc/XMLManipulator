@@ -1,0 +1,100 @@
+.XMLContainer .value{
+    font-style: italic;   
+	display: inline-block;
+	min-width: 50px;
+}
+
+.XMLContainer span.value:hover{
+	background-color : green;
+    cursor: pointer;
+    border-radius:5px;
+}
+
+.XMLContainer .elementNameClickable:hover{
+    cursor:pointer;
+    background-color: #1E90FF;
+    border-radius:5px;
+}
+
+.XMLContainer div > li>ul>li{
+    border-radius: 10px;
+    margin-bottom:3px;
+}
+
+.filenameInput{
+    margin-left: 20px;
+}
+
+.XMLContainer .commentPopover{
+    margin-left: 3px;
+    color:#5555FF;
+    opacity:0.6;
+}
+.XMLContainer .commentPopover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+.XMLContainer > li>ul>li{
+    border-radius: 10px;
+    margin-bottom:3px;
+}
+
+.XMLContainer ul{
+    padding-left: 20px;
+    list-style-position: inside;
+}
+
+.XMLContainer .reducer{
+    margin-right:3px;
+}
+
+#XMLSaveButton .glyphicon{
+	margin-right : 3px;
+}
+
+.XMLContainer li .hasChild{
+    list-style-type: none;
+}
+
+.XMLContainer li .hasChild > span{
+    color:blue;
+    font-size:103%
+}
+
+
+.XMLContainer .hasChild li{
+    background-color:#EEEEEE
+}
+
+.XMLContainer .hasChild li li{
+    background-color:#DDDDDD
+}
+
+.XMLContainer .hasChild li li li{
+    background-color:#CCCCCC
+}
+
+.XMLContainer .hasChild li li li li {
+    background-color:#BBBBBB
+}
+
+.XMLContainer .hasChild li li li li li{
+    background-color:#AAAAAA
+}
+
+.XMLContainer .hasChild li li li li li li{
+    background-color:#999999
+}
+
+.XMLContainer .hasChild li li li li li li li{
+    background-color:#888888
+}
+
+.XMLContainer .hasChild li li li li li li li li{
+    background-color:#777777
+}
+
+.XMLContainer .hasChild li li li li li li li li li{
+    background-color:#666666
+}

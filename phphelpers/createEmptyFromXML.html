@@ -1,0 +1,64 @@
+<!--
+//Takes an XML document in argument, and removes all the text nodes and attributes (except if the attribute is 'id') values from it, storing it in a new file empty.xml (in the same folder as source)
+Note : doesn't work for xml having mixed elements (text and children)
+-->
+<script type="text/javascript" src="../js/jquery-2.1.1.js"></script>
+<script type="text/javascript">
+//change values to empty the file you wish
+var filePath = '../data/teacher/liveContexts'
+var filename = 'liveContext1.xml'
+$(function(){    
+    var mode = 'nodes'; //use 'all' to also remove attributes values
+    var translationFile = 'translation/fr.json';
+    $.ajax({//loading translation
+        type: "GET",
+        url: filePath+'/'+filename,
+        success: function(data){
+            xml = $(data);
+            //goes recursively through all the elements of the xml tree
+            emptyElementAndChildren($(xml).children().first()[0])
+            
+            //takes an element of the xml tree as argument, and empties it and its children
+            function emptyElementAndChildren(elem){
+                
+                if(mode=='all'){
+                    //go through attributes, empty useless ones
+                    $.each($(elem)[0].attributes, function(){
+                        if(this.name != 'id' && this.name !='fixed' && this.name!='attrfixed'){
+                            this.value = '';
+                        }
+                    });
+                }
+                
+                //if only text contained and this is not fixed: empty it
+                if($(elem).children().length == 0 && $(elem).attr('fixed') != 'true'){
+                    $(elem).text('');
+                }
+                //else: recurse
+                else{
+                    $(elem).children().each(function(){
+                        emptyElementAndChildren($(this));
+                    });
+                }
+            }
+            
+            //serialize the empty xml file, and send it to the saveXMLDocument
+            var xmlS = (new XMLSerializer()).serializeToString(xml[0]);
+            $.post('saveXMLDocument.php', { file: filePath+'/'+'empty.xml' , data: xmlS, formerFile: ''}, 
+                function(data, txt, jqXHR){
+                    if(txt=="success"){
+                        if(data.message == 'RENAMEERROR'){
+                            alert('File not saved: a file with this name already exists');
+                        }
+                       else{                            
+                            alert('Your data have been successfully saved');
+                        }
+                    }
+                }
+            );
+            
+        }
+    });
+    
+});
+</script>
