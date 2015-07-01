@@ -131,7 +131,7 @@ function manipulateXML(filepath, container, mode, reader, filenameContainer){
                 //using ajax to store the xml on the server when clicking on the save button.
                 $(container +' #XMLSaveButton').click(function(){
                     var xmlS = (new XMLSerializer()).serializeToString(xml[container][0]);
-                    $.post('phphelpers/saveXMLDocument.php', { file: '../'+repo+$(filenameInput).val() , data: xmlS, formerFile: '../'+repo+filename}, 
+                    $.post('phphelpers/saveXMLDocument.php', { file: '../'+repo+'/'+$(filenameInput).val() , data: xmlS, formerFile: '../'+repo+'/'+filename}, 
                         function(data, txt, jqXHR){
                             if(txt=="success"){
                                 if(data.message == 'RENAMEERROR'){

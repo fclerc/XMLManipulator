@@ -5,7 +5,7 @@
 		<id id="LP2">rdupont</id>
 		<email id="LP3">dupont@laposte.net</email>
 		<birthDate id="LP4">1987-08-13</birthDate>
-		<sex id="LP5">M</sex>
+		<sex id="LP5">F</sex>
 		<professionalSituation id="LP6">student</professionalSituation>
 		<educationLevel id="LP7">master</educationLevel>
 		<educationDomain id="LP8">Computer Engineering</educationDomain>
@@ -152,22 +152,22 @@
 				<nbConsultations id="LP112">27</nbConsultations>
                 <childrenConsultationsDistribution id="LP113">
 					<childPercentage id="LP114">
-						<resource id="LP115"  fixed="true">http://claco.univ-lyon1.fr/resource/open/claroline_forum/4256</resource>
+						<resource id="LP115" fixed="true">http://claco.univ-lyon1.fr/resource/open/claroline_forum/4256</resource>
 						<percentage id="LP116">30</percentage>
 					</childPercentage>
                     <childPercentage id="LP117">
-						<resource id="LP118"  fixed="true">http://claco.univ-lyon1.fr/workspaces/802/open/tool/no_config/home/tab/1181#session_1</resource>
+						<resource id="LP118" fixed="true">http://claco.univ-lyon1.fr/workspaces/802/open/tool/no_config/home/tab/1181#session_1</resource>
 						<percentage id="LP119">70</percentage>
 					</childPercentage>
 				</childrenConsultationsDistribution>
 				<duration id="LP120">121</duration>
 				<childrenDurationDistribution id="LP121">
 					<childPercentage id="LP122">
-						<resource id="LP123"  fixed="true">http://claco.univ-lyon1.fr/resource/open/claroline_forum/4256</resource>
+						<resource id="LP123" fixed="true">http://claco.univ-lyon1.fr/resource/open/claroline_forum/4256</resource>
 						<percentage id="LP124">30</percentage>
 					</childPercentage>
                     <childPercentage id="LP125">
-						<resource id="LP126"  fixed="true">http://claco.univ-lyon1.fr/workspaces/802/open/tool/no_config/home/tab/1181#session_1</resource>
+						<resource id="LP126" fixed="true">http://claco.univ-lyon1.fr/workspaces/802/open/tool/no_config/home/tab/1181#session_1</resource>
 						<percentage id="LP127">70</percentage>
 					</childPercentage>
 				</childrenDurationDistribution>
